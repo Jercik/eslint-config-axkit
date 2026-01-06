@@ -1,0 +1,194 @@
+name: PR Review with axrun
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review-claude:
+    # Skip forked PRs - secrets are not available and the workflow would fail
+    if: github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install claude
+        run: npx -y axinstall claude --with npm
+
+      - name: Run Claude Review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: |
+          sed -e 's|{{REPO}}|${{ github.repository }}|g' \
+              -e 's|{{PR_NUMBER}}|${{ github.event.pull_request.number }}|g' \
+              -e 's|{{AGENT}}|Claude|g' \
+              -e 's|{{MODEL}}|opus|g' \
+              .github/prompts/pr-review.md > /tmp/prompt.md
+          npx -y axrun --agent claude --model opus \
+            --allow 'read,glob,grep,bash:gh api,bash:gh pr comment,bash:gh pr diff,bash:gh pr view,bash:npx -y askpplx,bash:ls,bash:cat,bash:grep,bash:tree,bash:pwd,bash:head,bash:tail,bash:jq,bash:wc,bash:sort,bash:uniq,bash:cut,bash:git diff,bash:git log,bash:git show,bash:git status,bash:git rev-parse' \
+            --prompt "$(cat /tmp/prompt.md)"
+
+  review-gemini:
+    # Skip forked PRs - secrets are not available and the workflow would fail
+    if: github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install gemini
+        run: npx -y axinstall gemini --with npm
+
+      - name: Run Gemini Review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AX_GEMINI_CREDENTIALS: ${{ secrets.AX_GEMINI_CREDENTIALS }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: |
+          sed -e 's|{{REPO}}|${{ github.repository }}|g' \
+              -e 's|{{PR_NUMBER}}|${{ github.event.pull_request.number }}|g' \
+              -e 's|{{AGENT}}|Gemini|g' \
+              -e 's|{{MODEL}}|gemini-3-pro-preview|g' \
+              .github/prompts/pr-review.md > /tmp/prompt.md
+          # Unset GITHUB_SHA to disable Gemini CLI's strict environment variable
+          # sanitization which blocks GH_TOKEN from reaching shell commands
+          unset GITHUB_SHA
+          npx -y axrun --agent gemini --model gemini-3-pro-preview \
+            --allow 'read,glob,grep,bash:gh api,bash:gh pr comment,bash:gh pr diff,bash:gh pr view,bash:npx -y askpplx,bash:ls,bash:cat,bash:grep,bash:tree,bash:pwd,bash:head,bash:tail,bash:jq,bash:wc,bash:sort,bash:uniq,bash:cut,bash:git diff,bash:git log,bash:git show,bash:git status,bash:git rev-parse' \
+            --prompt "$(cat /tmp/prompt.md)"
+
+  review-codex:
+    # Skip forked PRs - secrets are not available and the workflow would fail
+    if: github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install codex
+        run: npx -y axinstall codex --with npm
+
+      - name: Run Codex Review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AX_CODEX_CREDENTIALS: ${{ secrets.AX_CODEX_CREDENTIALS }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: |
+          sed -e 's|{{REPO}}|${{ github.repository }}|g' \
+              -e 's|{{PR_NUMBER}}|${{ github.event.pull_request.number }}|g' \
+              -e 's|{{AGENT}}|Codex|g' \
+              -e 's|{{MODEL}}|gpt-5.2-codex|g' \
+              .github/prompts/pr-review.md > /tmp/prompt.md
+          npx -y axrun --agent codex --model gpt-5.2-codex \
+            --allow 'read,glob,grep,bash:gh api,bash:gh pr comment,bash:gh pr diff,bash:gh pr view,bash:npx -y askpplx,bash:ls,bash:cat,bash:grep,bash:tree,bash:pwd,bash:head,bash:tail,bash:jq,bash:wc,bash:sort,bash:uniq,bash:cut,bash:git diff,bash:git log,bash:git show,bash:git status,bash:git rev-parse' \
+            --prompt "$(cat /tmp/prompt.md)"
+
+  review-opencode:
+    # Skip forked PRs - secrets are not available and the workflow would fail
+    if: github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install opencode
+        run: npx -y axinstall opencode --with npm
+
+      - name: Run OpenCode Review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AX_OPENCODE_CREDENTIALS: ${{ secrets.AX_OPENCODE_CREDENTIALS }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: |
+          sed -e 's|{{REPO}}|${{ github.repository }}|g' \
+              -e 's|{{PR_NUMBER}}|${{ github.event.pull_request.number }}|g' \
+              -e 's|{{AGENT}}|OpenCode|g' \
+              -e 's|{{MODEL}}|opencode/zai-glm-4.6|g' \
+              .github/prompts/pr-review.md > /tmp/prompt.md
+          npx -y axrun --agent opencode --model opencode/zai-glm-4.6 \
+            --allow 'read,glob,grep,bash:gh api,bash:gh pr comment,bash:gh pr diff,bash:gh pr view,bash:npx -y askpplx,bash:ls,bash:cat,bash:grep,bash:tree,bash:pwd,bash:head,bash:tail,bash:jq,bash:wc,bash:sort,bash:uniq,bash:cut,bash:git diff,bash:git log,bash:git show,bash:git status,bash:git rev-parse' \
+            --prompt "$(cat /tmp/prompt.md)"
+
+  review-copilot:
+    # Skip forked PRs - secrets are not available and the workflow would fail
+    if: github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install copilot
+        run: npx -y axinstall copilot --with npm
+
+      - name: Run Copilot Review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AX_COPILOT_CREDENTIALS: ${{ secrets.AX_COPILOT_CREDENTIALS }}
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+        run: |
+          sed -e 's|{{REPO}}|${{ github.repository }}|g' \
+              -e 's|{{PR_NUMBER}}|${{ github.event.pull_request.number }}|g' \
+              -e 's|{{AGENT}}|Copilot|g' \
+              -e 's|{{MODEL}}|gpt-5.2|g' \
+              .github/prompts/pr-review.md > /tmp/prompt.md
+          npx -y axrun --agent copilot --model gpt-5.2 \
+            --allow 'read,glob,grep,bash:gh api,bash:gh pr comment,bash:gh pr diff,bash:gh pr view,bash:npx -y askpplx,bash:ls,bash:cat,bash:grep,bash:tree,bash:pwd,bash:head,bash:tail,bash:jq,bash:wc,bash:sort,bash:uniq,bash:cut,bash:git diff,bash:git log,bash:git show,bash:git status,bash:git rev-parse' \
+            --prompt "$(cat /tmp/prompt.md)"
