@@ -2,13 +2,40 @@
 
 Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest.
 
+## Quick Start
+
+```bash
+# Install
+npm install -D eslint eslint-config-axpoint
+```
+
+Create an `eslint.config.js` in your project root:
+
+```js
+import path from "node:path";
+import { axpoint } from "eslint-config-axpoint";
+
+const gitignorePath = path.join(import.meta.dirname, ".gitignore");
+
+export default axpoint({ gitignorePath });
+```
+
+```bash
+# Run
+npx eslint .
+```
+
 ## Installation
 
 ```bash
-pnpm add -D eslint-config-axpoint eslint
+# npm
+npm install -D eslint eslint-config-axpoint
+
+# pnpm
+pnpm add -D eslint eslint-config-axpoint
 ```
 
-## Usage
+## Configuration
 
 Create an `eslint.config.js` in your project root:
 
@@ -31,33 +58,7 @@ export default axpoint();
 
 ## What's Included
 
-- **ESLint recommended** rules
-- **TypeScript strict type checking** via `typescript-eslint`
-- **Unicorn plugin** (recommended config)
-- **Vitest plugin** for test files (`*.test.*`, `*.spec.*`, `tests/**/*`)
-- **Prettier compatibility** (disables conflicting rules)
-- **Config file handling** (disables type-checking for `*.config.*` files)
-
-### Custom Rules
-
-Beyond the included presets, these additional rules are enabled:
-
-**Security:**
-
-- `no-eval`, `no-new-func`, `no-script-url`
-
-**Correctness:**
-
-- `no-return-assign`, `radix`, `guard-for-in`, `prefer-object-has-own`
-
-**Clarity:**
-
-- `prefer-regex-literals`, `require-unicode-regexp`, `no-extend-native`
-- `no-new-wrappers`, `no-implicit-coercion` (allows `!!`)
-
-**TypeScript:**
-
-- `@typescript-eslint/restrict-template-expressions` allows numbers
+For the current rule set and presets, see the source code in `src/`.
 
 ## Extending the Config
 
