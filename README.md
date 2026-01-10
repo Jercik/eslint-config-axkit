@@ -1,4 +1,4 @@
-# eslint-config-axpoint
+# eslint-config-axkit
 
 Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest.
 
@@ -6,18 +6,18 @@ Reusable ESLint flat config for TypeScript + Node.js projects with strict type c
 
 ```bash
 # Install
-npm install -D eslint eslint-config-axpoint
+npm install -D eslint eslint-config-axkit
 ```
 
 Create an `eslint.config.js` in your project root:
 
 ```js
 import path from "node:path";
-import { axpoint } from "eslint-config-axpoint";
+import { axkit } from "eslint-config-axkit";
 
 const gitignorePath = path.join(import.meta.dirname, ".gitignore");
 
-export default axpoint({ gitignorePath });
+export default axkit({ gitignorePath });
 ```
 
 ```bash
@@ -29,10 +29,10 @@ npx eslint .
 
 ```bash
 # npm
-npm install -D eslint eslint-config-axpoint
+npm install -D eslint eslint-config-axkit
 
 # pnpm
-pnpm add -D eslint eslint-config-axpoint
+pnpm add -D eslint eslint-config-axkit
 ```
 
 ## Configuration
@@ -41,19 +41,19 @@ Create an `eslint.config.js` in your project root:
 
 ```js
 import path from "node:path";
-import { axpoint } from "eslint-config-axpoint";
+import { axkit } from "eslint-config-axkit";
 
 const gitignorePath = path.join(import.meta.dirname, ".gitignore");
 
-export default axpoint({ gitignorePath });
+export default axkit({ gitignorePath });
 ```
 
 Or without gitignore integration:
 
 ```js
-import { axpoint } from "eslint-config-axpoint";
+import { axkit } from "eslint-config-axkit";
 
-export default axpoint();
+export default axkit();
 ```
 
 ## What's Included
@@ -66,12 +66,12 @@ Add additional rules or override existing ones by spreading additional config ob
 
 ```js
 import path from "node:path";
-import { axpoint } from "eslint-config-axpoint";
+import { axkit } from "eslint-config-axkit";
 
 const gitignorePath = path.join(import.meta.dirname, ".gitignore");
 
 export default [
-  ...axpoint({ gitignorePath }),
+  ...axkit({ gitignorePath }),
   {
     rules: {
       // Your custom rules
