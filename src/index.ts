@@ -25,7 +25,7 @@ export type Options = {
  * - Vitest plugin for test files
  * - Prettier compatibility (disables conflicting rules)
  */
-export function axpoint(options: Options = {}): Linter.Config[] {
+export function axkit(options: Options = {}): Linter.Config[] {
   const { gitignorePath } = options;
 
   const configs: Linter.Config[] = [];
@@ -45,7 +45,7 @@ export function axpoint(options: Options = {}): Linter.Config[] {
 
     // Base config for all JS/TS files
     {
-      name: "axpoint/base",
+      name: "axkit/base",
       files: ["**/*.{js,mjs,cjs,ts,tsx,mts,cts}"],
       languageOptions: {
         globals: globals.node,
@@ -85,14 +85,14 @@ export function axpoint(options: Options = {}): Linter.Config[] {
 
     // Disable type-checking for config files
     {
-      name: "axpoint/config-files",
+      name: "axkit/config-files",
       files: ["*.config.{js,ts,mjs,mts}"],
       ...tseslint.configs.disableTypeChecked,
     },
 
     // Vitest rules for test files
     {
-      name: "axpoint/vitest",
+      name: "axkit/vitest",
       files: [
         "**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}",
         "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}",
@@ -111,4 +111,4 @@ export function axpoint(options: Options = {}): Linter.Config[] {
   return configs;
 }
 
-export default axpoint;
+export default axkit;

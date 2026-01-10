@@ -1,16 +1,16 @@
 {
-  "name": "eslint-config-axpoint",
+  "name": "eslint-config-axkit",
   "author": "Łukasz Jerciński",
   "license": "MIT",
   "version": "1.0.0",
   "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jercik/eslint-config-axpoint.git"
+    "url": "git+https://github.com/Jercik/eslint-config-axkit.git"
   },
-  "homepage": "https://github.com/Jercik/eslint-config-axpoint#readme",
+  "homepage": "https://github.com/Jercik/eslint-config-axkit#readme",
   "bugs": {
-    "url": "https://github.com/Jercik/eslint-config-axpoint/issues"
+    "url": "https://github.com/Jercik/eslint-config-axkit/issues"
   },
   "type": "module",
   "main": "./dist/index.js",
@@ -51,7 +51,7 @@
     "prettier",
     "unicorn",
     "vitest",
-    "axpoint"
+    "axkit"
   ],
   "packageManager": "pnpm@10.26.1",
   "engines": {
