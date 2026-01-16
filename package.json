@@ -61,25 +61,25 @@
     "eslint": ">=9"
   },
   "dependencies": {
-    "@eslint/compat": "^2.0.0",
+    "@eslint/compat": "^2.0.1",
     "@eslint/js": "^9.39.2",
-    "@vitest/eslint-plugin": "^1.6.5",
+    "@vitest/eslint-plugin": "^1.6.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unicorn": "^62.0.0",
     "globals": "^17.0.0",
-    "typescript-eslint": "^8.52.0"
+    "typescript-eslint": "^8.53.0"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.0.3",
-    "@vitest/coverage-v8": "^4.0.16",
+    "@types/node": "^25.0.9",
+    "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^9.39.2",
     "fta-check": "^1.5.1",
     "fta-cli": "^3.0.0",
-    "knip": "^5.80.0",
+    "knip": "^5.81.0",
     "prettier": "3.7.4",
     "semantic-release": "^25.0.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.17"
   }
 }
