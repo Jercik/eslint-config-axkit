@@ -56,18 +56,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   }
 
   // ── Next.js (before base so axkit's strict rules override) ─────────
-  //
-  // When nextjs is enabled, we must use the consumer's typescript-eslint
-  // instance (resolved from CWD) rather than our own bundled copy.
-  // eslint-config-next registers the @typescript-eslint plugin, and ESLint
-  // forbids redefining a plugin with a different object identity.
-  let tseslintModule = tseslint;
-
   if (nextjs) {
-    tseslintModule = (await importOptional(
-      "typescript-eslint",
-    )) as typeof tseslint;
-
     const [nextVitals, nextTs] = await Promise.all([
       importOptional("eslint-config-next/core-web-vitals"),
       importOptional("eslint-config-next/typescript"),
@@ -81,7 +70,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   // ── Core configs ───────────────────────────────────────────────────
   configs.push(
     js.configs.recommended,
-    ...tseslintModule.configs.strictTypeChecked,
+    ...tseslint.configs.strictTypeChecked,
     baseConfig,
     eslintPluginUnicorn.configs.recommended,
 
@@ -101,7 +90,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
     {
       name: "axkit/config-files",
       files: ["*.config.{js,ts,mjs,mts}"],
-      ...tseslintModule.configs.disableTypeChecked,
+      ...tseslint.configs.disableTypeChecked,
     },
 
     vitestConfig,

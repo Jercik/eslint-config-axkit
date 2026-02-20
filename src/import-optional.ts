@@ -1,6 +1,16 @@
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
+const consumerRequire = createRequire(`${process.cwd()}/`);
+
+async function dynamicImport(resolvedPath: string): Promise<unknown> {
+  const imported = (await import(pathToFileURL(resolvedPath).href)) as Record<
+    string,
+    unknown
+  >;
+  return imported["default"] ?? imported;
+}
+
 /**
  * Dynamically import an optional dependency from the consumer's project.
  *
@@ -10,18 +20,13 @@ import { pathToFileURL } from "node:url";
  * are accessible.
  */
 export async function importOptional(name: string): Promise<unknown> {
-  const require = createRequire(`${process.cwd()}/`);
   let resolvedPath: string;
   try {
-    resolvedPath = require.resolve(name);
+    resolvedPath = consumerRequire.resolve(name);
   } catch {
     throw new Error(
       `eslint-config-axkit: "${name}" must be installed to use this option. Run: pnpm add -D ${name}`,
     );
   }
-  const imported = (await import(pathToFileURL(resolvedPath).href)) as Record<
-    string,
-    unknown
-  >;
-  return imported["default"] ?? imported;
+  return dynamicImport(resolvedPath);
 }
