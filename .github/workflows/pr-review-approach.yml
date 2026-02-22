@@ -31,7 +31,7 @@ jobs:
             vault_credential: ci-claude-oauth-token
           - agent: gemini
             display_name: Gemini
-            model: gemini-3-pro-preview
+            model: gemini-3.1-pro-preview
             vault_credential: ci-gemini-oauth-credentials
           - agent: copilot
             display_name: Copilot
