@@ -27,6 +27,14 @@ export type Options = {
    * Requires `eslint-plugin-storybook` to be installed.
    */
   storybook?: boolean;
+
+  /**
+   * Path to the Tailwind CSS entry point (e.g. `"src/app/globals.css"`).
+   * Enables eslint-plugin-better-tailwindcss recommended rules and configures
+   * the plugin to resolve project-specific classes, variants, and plugins.
+   * Requires `eslint-plugin-better-tailwindcss` to be installed.
+   */
+  tailwindcss?: string;
 };
 
 /**
@@ -42,9 +50,10 @@ export type Options = {
  * Optional:
  * - Next.js rules (core-web-vitals + typescript) via `nextjs: true`
  * - Storybook rules (flat/recommended) via `storybook: true`
+ * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
-  const { gitignorePath, nextjs, storybook } = options;
+  const { gitignorePath, nextjs, storybook, tailwindcss } = options;
 
   const configs: Linter.Config[] = [];
 
@@ -104,6 +113,27 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       configs: { "flat/recommended": Linter.Config[] };
     };
     configs.push(...storybookPlugin.configs["flat/recommended"]);
+  }
+
+  // ── Tailwind CSS (before Prettier) ─────────────────────────────────
+  if (tailwindcss) {
+    const tailwindPlugin = (await importOptional(
+      "eslint-plugin-better-tailwindcss",
+    )) as {
+      configs: { recommended: Linter.Config | Linter.Config[] };
+    };
+    const tailwindConfig = tailwindPlugin.configs.recommended;
+    configs.push(
+      ...(Array.isArray(tailwindConfig) ? tailwindConfig : [tailwindConfig]),
+      {
+        name: "axkit/tailwindcss-entry-point",
+        settings: {
+          "better-tailwindcss": {
+            entryPoint: tailwindcss,
+          },
+        },
+      },
+    );
   }
 
   // ── Prettier compatibility (must be last) ──────────────────────────
