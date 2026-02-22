@@ -60,10 +60,14 @@
   "peerDependencies": {
     "eslint": ">=10",
     "eslint-config-next": ">=16",
+    "eslint-plugin-better-tailwindcss": ">=4",
     "eslint-plugin-storybook": ">=10"
   },
   "peerDependenciesMeta": {
     "eslint-config-next": {
+      "optional": true
+    },
+    "eslint-plugin-better-tailwindcss": {
       "optional": true
     },
     "eslint-plugin-storybook": {
@@ -84,6 +88,7 @@
     "@types/node": "^25.3.0",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^10.0.0",
+    "eslint-plugin-better-tailwindcss": "^4.3.0",
     "fta-check": "^1.5.1",
     "fta-cli": "^3.0.0",
     "knip": "^5.84.1",

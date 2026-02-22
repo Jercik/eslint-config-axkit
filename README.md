@@ -83,9 +83,12 @@ export default [
 
 ## Options
 
-| Option          | Type     | Description                                                                |
-| --------------- | -------- | -------------------------------------------------------------------------- |
-| `gitignorePath` | `string` | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list. |
+| Option          | Type      | Description                                                                                                                                                                        |
+| --------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gitignorePath` | `string`  | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list.                                                                                                         |
+| `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript). Requires `eslint-config-next` to be installed.                                                           |
+| `storybook`     | `boolean` | Enable Storybook rules (`eslint-plugin-storybook` flat/recommended). Requires `eslint-plugin-storybook` to be installed.                                                           |
+| `tailwindcss`   | `boolean` | Enable Tailwind CSS rules (`eslint-plugin-better-tailwindcss` recommended). Enforces stylistic and correctness rules. Requires `eslint-plugin-better-tailwindcss` to be installed. |
 
 ## Requirements
 
