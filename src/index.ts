@@ -133,6 +133,22 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
           },
         },
       },
+      {
+        name: "axkit/tailwindcss-overrides",
+        rules: {
+          // Collapse multi-line className strings to single lines.
+          // Multi-line strings cause hydration mismatches in Next.js + Turbopack
+          // because the server preserves newlines while the client collapses them.
+          // See: https://github.com/tailwindlabs/tailwindcss/discussions/19582
+          "better-tailwindcss/no-unnecessary-whitespace": [
+            "error",
+            { allowMultiline: false },
+          ],
+          // Must be disabled — it enforces multi-line wrapping, which conflicts
+          // with allowMultiline: false above.
+          "better-tailwindcss/enforce-consistent-line-wrapping": "off",
+        },
+      },
     );
   }
 
