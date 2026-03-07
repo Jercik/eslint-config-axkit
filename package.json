@@ -75,19 +75,19 @@
     }
   },
   "dependencies": {
-    "@eslint/compat": "^2.0.2",
+    "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
     "@vitest/eslint-plugin": "^1.6.9",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unicorn": "^63.0.0",
-    "globals": "^17.3.0",
+    "globals": "^17.4.0",
     "typescript-eslint": "^8.56.1"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.3.2",
+    "@types/node": "^25.3.5",
     "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^10.0.2",
+    "eslint": "^10.0.3",
     "fta-check": "^1.5.1",
     "fta-cli": "^3.0.0",
     "knip": "^5.85.0",
