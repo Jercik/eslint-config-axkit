@@ -55,7 +55,12 @@ export type Options = {
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   const { gitignorePath, nextjs, storybook, tailwindcss } = options;
 
-  const configs: Linter.Config[] = [];
+  const configs: Linter.Config[] = [
+    {
+      name: "axkit/ignores",
+      ignores: [".agents/", ".claude/"],
+    },
+  ];
 
   // ── Gitignore ──────────────────────────────────────────────────────
   if (gitignorePath) {
