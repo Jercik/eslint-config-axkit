@@ -23,10 +23,10 @@ export type Options = {
   nextjs?: boolean;
 
   /**
-   * Disable rules that conflict with idiomatic Fastify patterns:
-   * - `unicorn/prevent-abbreviations` — Fastify uses `app`, `db`, `opts`, `params` pervasively
-   * - `@typescript-eslint/require-await` — `FastifyPluginAsync` requires `async` but plugin bodies often contain no `await`
-   * - `@typescript-eslint/strict-void-return` — route handlers use `return reply.notFound()` as control flow
+   * Relax rules that conflict with idiomatic Fastify patterns:
+   * - `unicorn/prevent-abbreviations` — configured with allowList for common Fastify terms (`app`, `db`, `req`, `res`, `opts`, `params`, etc.)
+   * - `@typescript-eslint/require-await` — disabled; `FastifyPluginAsync` requires `async` but plugin bodies often contain no `await`
+   * - `@typescript-eslint/strict-void-return` — disabled; route handlers use `return reply.notFound()` as control flow
    */
   fastify?: boolean;
 
@@ -123,7 +123,23 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
     configs.push({
       name: "axkit/fastify",
       rules: {
-        "unicorn/prevent-abbreviations": "off",
+        "unicorn/prevent-abbreviations": [
+          "error",
+          {
+            allowList: {
+              app: true,
+              args: true,
+              ctx: true,
+              db: true,
+              env: true,
+              err: true,
+              opts: true,
+              params: true,
+              req: true,
+              res: true,
+            },
+          },
+        ],
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/strict-void-return": "off",
       },

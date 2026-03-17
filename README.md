@@ -83,13 +83,13 @@ export default [
 
 ## Options
 
-| Option          | Type      | Description                                                                                                                                                                                                                               |
-| --------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `gitignorePath` | `string`  | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list.                                                                                                                                                                |
-| `fastify`       | `boolean` | Disable rules that conflict with idiomatic Fastify patterns (`unicorn/prevent-abbreviations`, `@typescript-eslint/require-await`, `@typescript-eslint/strict-void-return`).                                                               |
-| `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript). Requires `eslint-config-next` to be installed.                                                                                                                  |
-| `storybook`     | `boolean` | Enable Storybook rules (`eslint-plugin-storybook` flat/recommended). Requires `eslint-plugin-storybook` to be installed.                                                                                                                  |
-| `tailwindcss`   | `string`  | Path to the Tailwind CSS entry point (e.g. `"src/app/globals.css"`). Enables `eslint-plugin-better-tailwindcss` recommended rules enforcing stylistic and correctness rules. Requires `eslint-plugin-better-tailwindcss` to be installed. |
+| Option          | Type      | Description                                                                                                                                                                                                                                   |
+| --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gitignorePath` | `string`  | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list.                                                                                                                                                                    |
+| `fastify`       | `boolean` | Relax rules that conflict with idiomatic Fastify patterns. Configures `unicorn/prevent-abbreviations` with an allowList for common terms (`app`, `db`, `req`, etc.) and disables `@typescript-eslint/require-await` and `strict-void-return`. |
+| `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript). Requires `eslint-config-next` to be installed.                                                                                                                      |
+| `storybook`     | `boolean` | Enable Storybook rules (`eslint-plugin-storybook` flat/recommended). Requires `eslint-plugin-storybook` to be installed.                                                                                                                      |
+| `tailwindcss`   | `string`  | Path to the Tailwind CSS entry point (e.g. `"src/app/globals.css"`). Enables `eslint-plugin-better-tailwindcss` recommended rules enforcing stylistic and correctness rules. Requires `eslint-plugin-better-tailwindcss` to be installed.     |
 
 ## Requirements
 
