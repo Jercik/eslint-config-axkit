@@ -137,7 +137,9 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
     configs.push(vitestConfig);
   } else {
     // node:test's describe/it return Promise<void> but are not meant to be
-    // awaited — the test runner handles them.
+    // awaited — the test runner handles them. Ideally we'd use
+    // allowForKnownSafeCalls with { from: "package", package: "node:test" },
+    // but that's broken: https://github.com/typescript-eslint/typescript-eslint/issues/11504
     configs.push({
       name: "axkit/test-files",
       files: [
