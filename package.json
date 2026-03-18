@@ -72,12 +72,14 @@
     },
     "eslint-plugin-storybook": {
       "optional": true
+    },
+    "@vitest/eslint-plugin": {
+      "optional": true
     }
   },
   "dependencies": {
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
-    "@vitest/eslint-plugin": "^1.6.9",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unicorn": "^63.0.0",
     "globals": "^17.4.0",

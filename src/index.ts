@@ -7,7 +7,7 @@ import type { Linter } from "eslint";
 import { importOptional } from "./import-optional.ts";
 import { baseConfig } from "./base-config.ts";
 import { nodeTestConfig } from "./node-test-config.ts";
-import { vitestConfig } from "./vitest-config.ts";
+import { createVitestConfig } from "./vitest-config.ts";
 
 export type Options = {
   /**
@@ -24,12 +24,8 @@ export type Options = {
   nextjs?: boolean;
 
   /**
-   * Enable Vitest ESLint rules for test files. Set to `false` when using
-   * a different test runner (e.g. `node:test`). When disabled, whitelists
-   * `node:test`'s promise-returning functions in `@typescript-eslint/no-floating-promises`
-   * via `allowForKnownSafeCalls`.
-   *
-   * Defaults to `true`.
+   * Enable Vitest ESLint rules for test files.
+   * Requires `@vitest/eslint-plugin` to be installed.
    */
   vitest?: boolean;
 
@@ -63,23 +59,18 @@ export type Options = {
  * - ESLint recommended rules
  * - TypeScript strict type checking
  * - Unicorn plugin (recommended)
- * - Vitest plugin for test files (disable with `vitest: false` for `node:test` or other runners)
+ * - `node:test` support (`allowForKnownSafeCalls` for promise-returning functions)
  * - Prettier compatibility (disables conflicting rules)
  *
  * Optional:
+ * - Vitest plugin for test files via `vitest: true`
  * - Next.js rules (core-web-vitals + typescript) via `nextjs: true`
  * - Storybook rules (flat/recommended) via `storybook: true`
  * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
-  const {
-    gitignorePath,
-    vitest = true,
-    fastify,
-    nextjs,
-    storybook,
-    tailwindcss,
-  } = options;
+  const { gitignorePath, vitest, fastify, nextjs, storybook, tailwindcss } =
+    options;
 
   const configs: Linter.Config[] = [
     {
@@ -132,12 +123,19 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       files: ["*.config.{js,ts,mjs,mts}"],
       ...tseslint.configs.disableTypeChecked,
     },
+
+    // node:test (always applied — harmless if not using node:test)
+    nodeTestConfig,
   );
 
+  // ── Vitest (optional, requires @vitest/eslint-plugin) ──────────────
   if (vitest) {
-    configs.push(vitestConfig);
-  } else {
-    configs.push(nodeTestConfig);
+    const vitestPlugin = await importOptional("@vitest/eslint-plugin");
+    configs.push(
+      createVitestConfig(
+        vitestPlugin as Parameters<typeof createVitestConfig>[0],
+      ),
+    );
   }
 
   // ── Fastify (disable conflicting rules) ────────────────────────────
