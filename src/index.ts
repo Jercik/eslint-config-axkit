@@ -23,6 +23,16 @@ export type Options = {
   nextjs?: boolean;
 
   /**
+   * Enable Vitest ESLint rules for test files. Set to `false` when using
+   * a different test runner (e.g. `node:test`). When disabled, also relaxes
+   * `@typescript-eslint/no-floating-promises` in test files since `node:test`'s
+   * `describe`/`it` return `Promise<void>` but are not meant to be awaited.
+   *
+   * Defaults to `true`.
+   */
+  vitest?: boolean;
+
+  /**
    * Relax rules that conflict with idiomatic Fastify patterns:
    * - `unicorn/prevent-abbreviations` — configured with allowList for common Fastify terms (`app`, `db`, `req`, `res`, `opts`, `params`, etc.)
    * - `@typescript-eslint/require-await` — disabled; `FastifyPluginAsync` requires `async` but plugin bodies often contain no `await`
@@ -61,7 +71,14 @@ export type Options = {
  * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
-  const { gitignorePath, fastify, nextjs, storybook, tailwindcss } = options;
+  const {
+    gitignorePath,
+    vitest = true,
+    fastify,
+    nextjs,
+    storybook,
+    tailwindcss,
+  } = options;
 
   const configs: Linter.Config[] = [
     {
@@ -114,9 +131,24 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       files: ["*.config.{js,ts,mjs,mts}"],
       ...tseslint.configs.disableTypeChecked,
     },
-
-    vitestConfig,
   );
+
+  if (vitest) {
+    configs.push(vitestConfig);
+  } else {
+    // node:test's describe/it return Promise<void> but are not meant to be
+    // awaited — the test runner handles them.
+    configs.push({
+      name: "axkit/test-files",
+      files: [
+        "**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}",
+        "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}",
+      ],
+      rules: {
+        "@typescript-eslint/no-floating-promises": "off",
+      },
+    });
+  }
 
   // ── Fastify (disable conflicting rules) ────────────────────────────
   if (fastify) {
