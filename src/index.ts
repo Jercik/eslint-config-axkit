@@ -25,9 +25,9 @@ export type Options = {
 
   /**
    * Enable Vitest ESLint rules for test files. Set to `false` when using
-   * a different test runner (e.g. `node:test`). When disabled, turns off
-   * `@typescript-eslint/no-floating-promises` in test files since `node:test`'s
-   * `describe`/`it`/`test` return `Promise<void>` but are not meant to be awaited.
+   * a different test runner (e.g. `node:test`). When disabled, whitelists
+   * `node:test`'s promise-returning functions in `@typescript-eslint/no-floating-promises`
+   * via `allowForKnownSafeCalls`.
    *
    * Defaults to `true`.
    */
