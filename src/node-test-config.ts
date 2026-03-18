@@ -8,7 +8,7 @@ import type { Linter } from "eslint";
  * return `Promise<void>` but are not meant to be awaited.
  */
 export const nodeTestConfig: Linter.Config = {
-  name: "axkit/test-files",
+  name: "axkit/node-test",
   files: [
     "**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}",
     "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}",
