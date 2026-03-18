@@ -6,6 +6,7 @@ import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import type { Linter } from "eslint";
 import { importOptional } from "./import-optional.ts";
 import { baseConfig } from "./base-config.ts";
+import { nodeTestConfig } from "./node-test-config.ts";
 import { vitestConfig } from "./vitest-config.ts";
 
 export type Options = {
@@ -24,9 +25,10 @@ export type Options = {
 
   /**
    * Enable Vitest ESLint rules for test files. Set to `false` when using
-   * a different test runner (e.g. `node:test`). When disabled, also relaxes
-   * `@typescript-eslint/no-floating-promises` in test files since `node:test`'s
-   * `describe`/`it` return `Promise<void>` but are not meant to be awaited.
+   * a different test runner (e.g. `node:test`). When disabled, whitelists
+   * `node:test`'s `describe`/`it`/`test` in `@typescript-eslint/no-floating-promises`
+   * via `allowForKnownSafeCalls` since they return `Promise<void>` but are not
+   * meant to be awaited.
    *
    * Defaults to `true`.
    */
@@ -136,20 +138,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   if (vitest) {
     configs.push(vitestConfig);
   } else {
-    // node:test's describe/it return Promise<void> but are not meant to be
-    // awaited — the test runner handles them. Ideally we'd use
-    // allowForKnownSafeCalls with { from: "package", package: "node:test" },
-    // but that's broken: https://github.com/typescript-eslint/typescript-eslint/issues/11504
-    configs.push({
-      name: "axkit/test-files",
-      files: [
-        "**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}",
-        "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}",
-      ],
-      rules: {
-        "@typescript-eslint/no-floating-promises": "off",
-      },
-    });
+    configs.push(nodeTestConfig);
   }
 
   // ── Fastify (disable conflicting rules) ────────────────────────────
