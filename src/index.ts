@@ -62,7 +62,7 @@ export type Options = {
  * - ESLint recommended rules
  * - TypeScript strict type checking
  * - Unicorn plugin (recommended)
- * - Vitest plugin for test files
+ * - Vitest plugin for test files (disable with `vitest: false` for `node:test` or other runners)
  * - Prettier compatibility (disables conflicting rules)
  *
  * Optional:
