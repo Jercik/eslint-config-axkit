@@ -1,11 +1,10 @@
 import type { Linter } from "eslint";
 
 /**
- * ESLint config for projects using `node:test` instead of Vitest.
- *
  * Whitelists promise-returning `node:test` functions in the
- * `no-floating-promises` rule via `allowForKnownSafeCalls` — these
- * return `Promise<void>` but are not meant to be awaited.
+ * `no-floating-promises` rule via `allowForKnownSafeCalls`.
+ *
+ * Always applied — harmless if not using `node:test`.
  */
 export const nodeTestConfig: Linter.Config = {
   name: "axkit/node-test",

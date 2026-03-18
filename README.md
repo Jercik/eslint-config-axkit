@@ -1,6 +1,6 @@
 # eslint-config-axkit
 
-Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest.
+Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn.
 
 ## Quick Start
 
