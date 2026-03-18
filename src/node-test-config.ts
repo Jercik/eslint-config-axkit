@@ -3,7 +3,7 @@ import type { Linter } from "eslint";
 /**
  * ESLint config for projects using `node:test` instead of Vitest.
  *
- * Whitelists `describe`, `it`, and `test` from `node:test` in the
+ * Whitelists promise-returning `node:test` functions in the
  * `no-floating-promises` rule via `allowForKnownSafeCalls` — these
  * return `Promise<void>` but are not meant to be awaited.
  */
@@ -21,7 +21,7 @@ export const nodeTestConfig: Linter.Config = {
           {
             from: "package",
             package: "node:test",
-            name: ["describe", "it", "test"],
+            name: ["describe", "it", "test", "suite", "todo", "skip", "only"],
           },
         ],
       },
