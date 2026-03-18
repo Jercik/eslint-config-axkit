@@ -3,7 +3,7 @@
   "author": "Łukasz Jerciński",
   "license": "MIT",
   "version": "1.0.0",
-  "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest",
+  "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jercik/eslint-config-axkit.git"
@@ -61,7 +61,8 @@
     "eslint": ">=10",
     "eslint-config-next": ">=16",
     "eslint-plugin-better-tailwindcss": ">=4",
-    "eslint-plugin-storybook": ">=10"
+    "eslint-plugin-storybook": ">=10",
+    "@vitest/eslint-plugin": ">=1"
   },
   "peerDependenciesMeta": {
     "eslint-config-next": {
@@ -72,12 +73,14 @@
     },
     "eslint-plugin-storybook": {
       "optional": true
+    },
+    "@vitest/eslint-plugin": {
+      "optional": true
     }
   },
   "dependencies": {
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
-    "@vitest/eslint-plugin": "^1.6.9",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unicorn": "^63.0.0",
     "globals": "^17.4.0",

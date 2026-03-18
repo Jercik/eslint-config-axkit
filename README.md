@@ -1,6 +1,6 @@
 # eslint-config-axkit
 
-Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, Unicorn, and Vitest.
+Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn.
 
 ## Quick Start
 
@@ -86,6 +86,7 @@ export default [
 | Option          | Type      | Description                                                                                                                                                                                                                                                      |
 | --------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `gitignorePath` | `string`  | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list.                                                                                                                                                                                       |
+| `vitest`        | `boolean` | Enable Vitest ESLint rules for test files. Requires `@vitest/eslint-plugin` to be installed.                                                                                                                                                                     |
 | `fastify`       | `boolean` | Relax rules that conflict with idiomatic Fastify patterns. Configures `unicorn/prevent-abbreviations` with an allowList for common terms (`app`, `db`, `req`, etc.) and disables `@typescript-eslint/require-await` and `@typescript-eslint/strict-void-return`. |
 | `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript). Requires `eslint-config-next` to be installed.                                                                                                                                         |
 | `storybook`     | `boolean` | Enable Storybook rules (`eslint-plugin-storybook` flat/recommended). Requires `eslint-plugin-storybook` to be installed.                                                                                                                                         |

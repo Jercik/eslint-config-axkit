@@ -6,7 +6,8 @@ import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import type { Linter } from "eslint";
 import { importOptional } from "./import-optional.ts";
 import { baseConfig } from "./base-config.ts";
-import { vitestConfig } from "./vitest-config.ts";
+import { nodeTestConfig } from "./node-test-config.ts";
+import { createVitestConfig } from "./vitest-config.ts";
 
 export type Options = {
   /**
@@ -21,6 +22,12 @@ export type Options = {
    * Requires `eslint-config-next` to be installed.
    */
   nextjs?: boolean;
+
+  /**
+   * Enable Vitest ESLint rules for test files.
+   * Requires `@vitest/eslint-plugin` to be installed.
+   */
+  vitest?: boolean;
 
   /**
    * Relax rules that conflict with idiomatic Fastify patterns:
@@ -52,16 +59,18 @@ export type Options = {
  * - ESLint recommended rules
  * - TypeScript strict type checking
  * - Unicorn plugin (recommended)
- * - Vitest plugin for test files
+ * - `node:test` support (`allowForKnownSafeCalls` for promise-returning functions)
  * - Prettier compatibility (disables conflicting rules)
  *
  * Optional:
+ * - Vitest plugin for test files via `vitest: true`
  * - Next.js rules (core-web-vitals + typescript) via `nextjs: true`
  * - Storybook rules (flat/recommended) via `storybook: true`
  * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
-  const { gitignorePath, fastify, nextjs, storybook, tailwindcss } = options;
+  const { gitignorePath, vitest, fastify, nextjs, storybook, tailwindcss } =
+    options;
 
   const configs: Linter.Config[] = [
     {
@@ -115,8 +124,19 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       ...tseslint.configs.disableTypeChecked,
     },
 
-    vitestConfig,
+    // node:test (always applied — harmless if not using node:test)
+    nodeTestConfig,
   );
+
+  // ── Vitest (optional, requires @vitest/eslint-plugin) ──────────────
+  if (vitest) {
+    const vitestPlugin = await importOptional("@vitest/eslint-plugin");
+    configs.push(
+      createVitestConfig(
+        vitestPlugin as Parameters<typeof createVitestConfig>[0],
+      ),
+    );
+  }
 
   // ── Fastify (disable conflicting rules) ────────────────────────────
   if (fastify) {
