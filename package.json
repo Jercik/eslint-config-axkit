@@ -1,4 +1,9 @@
 {
+  "name": "eslint-config-axkit",
+  "version": "1.0.0",
+  "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn",
+  "author": "Łukasz Jerciński",
+  "license": "MIT",
   "scripts": {
     "prepack": "pnpm run rebuild",
     "prepare": "git config core.hooksPath .githooks",
@@ -13,11 +18,6 @@
     "test": "node --test src/**/*.test.ts",
     "typecheck": "tsc -b --noEmit"
   },
-  "name": "eslint-config-axkit",
-  "author": "Łukasz Jerciński",
-  "license": "MIT",
-  "version": "1.0.0",
-  "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jercik/eslint-config-axkit.git"
@@ -50,7 +50,7 @@
     "unicorn",
     "axkit"
   ],
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22.19.0"
   },
