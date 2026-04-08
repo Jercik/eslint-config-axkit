@@ -3,11 +3,11 @@ import tseslint from "typescript-eslint";
 import { includeIgnoreFile } from "@eslint/compat";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
-import type { Linter } from "eslint";
+import type { ESLint, Linter } from "eslint";
 import { importOptional } from "./import-optional.ts";
-import { baseConfig } from "./base-config.ts";
+import { createBaseConfig } from "./base-config.ts";
 import { nodeTestConfig } from "./node-test-config.ts";
-import { createVitestConfig } from "./vitest-config.ts";
+import { createVitestConfig } from "./create-vitest-config.ts";
 
 export type Options = {
   /**
@@ -17,9 +17,9 @@ export type Options = {
   gitignorePath?: string;
 
   /**
-   * Enable Next.js rules (eslint-config-next core-web-vitals + typescript).
-   * Includes React, React Hooks, JSX accessibility, and Next.js-specific rules.
-   * Requires `eslint-config-next` to be installed.
+   * Enable Next.js rules (eslint-config-next core-web-vitals + typescript)
+   * and React Fast Refresh (`only-export-components`) for `.tsx`/`.jsx` files.
+   * Requires `eslint-config-next` and `eslint-plugin-react-refresh` to be installed.
    */
   nextjs?: boolean;
 
@@ -65,6 +65,7 @@ export type Options = {
  * Optional:
  * - Vitest plugin for test files via `vitest: true`
  * - Next.js rules (core-web-vitals + typescript) via `nextjs: true`
+ * - React Fast Refresh rule (included with `nextjs: true`)
  * - Storybook rules (flat/recommended) via `storybook: true`
  * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
@@ -88,13 +89,25 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
 
   // ── Next.js (before base so axkit's strict rules override) ─────────
   if (nextjs) {
-    const [nextVitals, nextTs] = await Promise.all([
+    const [nextVitals, nextTs, reactRefreshPlugin] = await Promise.all([
       importOptional("eslint-config-next/core-web-vitals"),
       importOptional("eslint-config-next/typescript"),
+      importOptional("eslint-plugin-react-refresh"),
     ]);
     configs.push(
       ...(nextVitals as Linter.Config[]),
       ...(nextTs as Linter.Config[]),
+      {
+        name: "axkit/react-refresh",
+        files: ["**/*.{tsx,jsx}"],
+        plugins: { "react-refresh": reactRefreshPlugin as ESLint.Plugin },
+        rules: {
+          "react-refresh/only-export-components": [
+            "warn",
+            { allowConstantExport: true },
+          ],
+        },
+      },
     );
   }
 
@@ -102,7 +115,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   configs.push(
     js.configs.recommended,
     ...tseslint.configs.strictTypeChecked,
-    baseConfig,
+    createBaseConfig(),
     eslintPluginUnicorn.configs.recommended,
 
     // Unicorn rules that are off by default

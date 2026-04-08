@@ -60,6 +60,8 @@ export default axkit();
 
 For the current rule set and presets, see the source code in `src/`.
 
+By default, axkit ignores files under `.agents/` and `.claude/`.
+
 ## Extending the Config
 
 Add additional rules or override existing ones by spreading additional config objects:
@@ -88,13 +90,15 @@ export default [
 | `gitignorePath` | `string`  | Path to `.gitignore` file. Patterns will be added to ESLint's ignore list.                                                                                                                                                                                       |
 | `vitest`        | `boolean` | Enable Vitest ESLint rules for test files. Requires `@vitest/eslint-plugin` to be installed.                                                                                                                                                                     |
 | `fastify`       | `boolean` | Relax rules that conflict with idiomatic Fastify patterns. Configures `unicorn/prevent-abbreviations` with an allowList for common terms (`app`, `db`, `req`, etc.) and disables `@typescript-eslint/require-await` and `@typescript-eslint/strict-void-return`. |
-| `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript). Requires `eslint-config-next` to be installed.                                                                                                                                         |
+| `nextjs`        | `boolean` | Enable Next.js rules (`eslint-config-next` core-web-vitals + typescript) and React Fast Refresh (`only-export-components`) for `.tsx`/`.jsx` files. Requires `eslint-config-next` and `eslint-plugin-react-refresh` to be installed.                             |
 | `storybook`     | `boolean` | Enable Storybook rules (`eslint-plugin-storybook` flat/recommended). Requires `eslint-plugin-storybook` to be installed.                                                                                                                                         |
 | `tailwindcss`   | `string`  | Path to the Tailwind CSS entry point (e.g. `"src/app/globals.css"`). Enables `eslint-plugin-better-tailwindcss` recommended rules enforcing stylistic and correctness rules. Requires `eslint-plugin-better-tailwindcss` to be installed.                        |
 
+Axkit includes a built-in narrow allowlist entry for `scripts/export-release-version-plugin.mjs`, which is used by repositories managed with `verify-repository`.
+
 ## Requirements
 
-- Node.js >= 22.14.0
+- Node.js >= 22.19.0
 - ESLint >= 10
 
 ## License
