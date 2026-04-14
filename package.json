@@ -80,21 +80,21 @@
     }
   },
   "dependencies": {
-    "@eslint/compat": "^2.0.4",
+    "@eslint/compat": "^2.0.5",
     "@eslint/js": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unicorn": "^64.0.0",
-    "globals": "^17.4.0",
-    "typescript-eslint": "^8.58.1"
+    "globals": "^17.5.0",
+    "typescript-eslint": "^8.58.2"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "eslint": "^10.2.0",
-    "fta-check": "^1.5.1",
+    "fta-check": "^1.5.2",
     "fta-cli": "^3.0.0",
-    "knip": "^6.3.0",
-    "prettier": "3.8.1",
+    "knip": "^6.4.1",
+    "prettier": "3.8.2",
     "semantic-release": "^25.0.3",
     "typescript": "^6.0.2"
   }

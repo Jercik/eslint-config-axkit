@@ -135,6 +135,10 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       name: "axkit/config-files",
       files: ["*.config.{js,ts,mjs,mts}"],
       ...tseslint.configs.disableTypeChecked,
+      rules: {
+        ...tseslint.configs.disableTypeChecked.rules,
+        "import/no-anonymous-default-export": "off",
+      },
     },
 
     // node:test (always applied — harmless if not using node:test)
