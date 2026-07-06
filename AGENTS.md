@@ -1,6 +1,6 @@
 # Rule: Mandatory Startup Reads
 
-Before taking any action, read @README.md for project overview and context. If it does not exist, skip silently and continue.
+Before taking any action, read @README.md for project context.
 
 # Rule: `askpplx` CLI Usage
 
@@ -64,11 +64,11 @@ const description = raw.slice(0, 500);
 
 # Rule: Early Returns
 
-Handle edge cases and invalid states at the top of a function with guard clauses that return early. Invert conditions and exit immediately—null checks, permission checks, validation, empty collections. Main logic stays at the top level with minimal indentation.
+Handle edge cases and invalid states at the top of a function with guard clauses that return early. Invert conditions and exit immediately: null checks, permission checks, validation, empty collections. Main logic stays at the top level with minimal indentation.
 
 # Rule: File Naming Matches Contents
 
-Name files for what the module actually does. Use kebab-case and prefer verb-noun or domain-role names. Match the primary export; if you cannot name it crisply, split the file.
+Name files for what the module does. Use kebab-case and prefer verb-noun or domain-role names. Match the primary export; if you cannot name it crisply, split the file.
 
 ## Checklist
 
@@ -104,61 +104,18 @@ function sendUserExpiryEmail(): void {
 
 // Good: Functional core (pure, testable)
 function getExpiredUsers(users: User[], cutoff: Date): User[] {
-  return users.filter(
-    (user) => user.subscriptionEndDate <= cutoff && !user.isFreeTrial,
-  );
+  return users.filter((user) => user.subscriptionEndDate <= cutoff && !user.isFreeTrial);
 }
 
 function generateExpiryEmails(users: User[]): Array<[string, string]> {
-  return users.map((user) => [
-    user.email,
-    `Your account has expired ${user.name}.`,
-  ]);
+  return users.map((user) => [user.email, `Your account has expired ${user.name}.`]);
 }
 
 // Imperative shell (orchestrates side effects)
-email.bulkSend(
-  generateExpiryEmails(getExpiredUsers(db.getUsers(), new Date())),
-);
+email.bulkSend(generateExpiryEmails(getExpiredUsers(db.getUsers(), new Date())));
 ```
 
 Test the functional core, not the shell. Core tests are fast, deterministic, and need no mocks; the shell becomes thin orchestration where bugs are easy to spot through review. If shell tests are explicitly requested, prefer integration tests over unit tests with mocks.
-
-# Rule: Inline Obvious Code
-
-Keep simple, self-explanatory code inline rather than extracting it into functions. Every abstraction carries cognitive cost—readers must jump to another location, parse a signature, and track context. For obvious logic, this overhead exceeds any benefit.
-
-Extracting code into a function is not inherently virtuous. A function should exist because it encapsulates meaningful complexity, not because code appears twice.
-
-```ts
-// GOOD: Inline obvious logic
-if (removedFrom.length === 0) {
-  return { ok: true, message: "No credentials found" };
-}
-return { ok: true, message: `Removed from ${removedFrom.join(" and ")}` };
-
-// BAD: Extraction hides obvious logic behind indirection
-return formatRemovalResult(removedFrom);
-```
-
-## When to extract
-
-Extract when duplication causes real maintenance risk, not merely because code appears twice:
-
-- A name clarifies complex intent
-- Multiple call sites must stay in lockstep and silent divergence would be a bug
-- The function encapsulates a coherent standalone concept
-- Testing it in isolation provides value
-
-Don't extract for hypothetical reuse:
-
-- For a single caller
-- Because "we might need this elsewhere"
-- When the name describes implementation rather than purpose
-
-## The wrong abstraction
-
-Abstractions decay when requirements diverge: programmer A extracts duplication into a shared function, programmer B adds a parameter for different behavior, and this repeats until the "abstraction" is a mess of conditionals. When an abstraction proves wrong, re-introduce duplication and let the code show you what's actually shared. Duplication is far cheaper than the wrong abstraction.
 
 # Rule: No Logic in Tests
 
@@ -177,19 +134,6 @@ expect(getPhotosUrl()).toBe("http://example.com/photos"); // fails, reveals the 
 Unlike production code that handles varied inputs, tests verify specific cases. State expectations directly rather than computing them. When a test fails, the expected value should be immediately readable without mental evaluation.
 
 Use test utilities for setup and data preparation—fixtures, builders, factories, mock configuration—but never for computing expected values. Keep assertion logic in the test body with literal expectations.
-
-# Rule: Package Manager Execution
-
-How different package manager commands resolve binaries:
-
-| Command           | Behavior                                                                |
-| ----------------- | ----------------------------------------------------------------------- |
-| `pnpm exec foo`   | Runs from `./node_modules/.bin`; falls back to system PATH              |
-| `pnpx foo`        | Always fetches from registry (uses dlx cache); ignores local installs   |
-| `npx foo`         | Checks local `node_modules/.bin` → global → downloads from registry     |
-| `npx foo@version` | Resolves version, uses local if exact match exists, otherwise downloads |
-
-`pnpx` is an alias for `pnpm dlx`.
 
 # Rule: Parse, Don't Validate
 
@@ -301,10 +245,7 @@ function isWithinDirectory(base: string, target: string): boolean {
   const resolvedBase = resolve(base);
   const resolvedTarget = resolve(target);
   // BAD: Case-sensitive comparison fails on Windows
-  return (
-    resolvedTarget.startsWith(resolvedBase + sep) ||
-    resolvedTarget === resolvedBase
-  );
+  return resolvedTarget.startsWith(resolvedBase + sep) || resolvedTarget === resolvedBase;
 }
 ```
 
@@ -340,7 +281,7 @@ function isWithinDirectory(base: string, target: string): boolean {
 | Sibling         | `"../other/file.txt"`    | Escapes upward |
 | Different drive | `"D:\\other"` (absolute) | Different root |
 
-**Note:** On Windows, `path.relative()` performs case-insensitive comparison (e.g., `path.win32.relative('C:/Foo', 'c:/foo/bar')` returns `'bar'`). This makes it suitable for path containment checks without manual case normalization.
+On Windows, `path.relative()` performs case-insensitive comparison (e.g., `path.win32.relative('C:/Foo', 'c:/foo/bar')` returns `'bar'`). This makes it suitable for path containment checks without manual case normalization.
 
 ## Caveats
 
@@ -363,7 +304,7 @@ const program = new Command()
 
 # Rule: Package.json Imports
 
-Use the `imports` field in `package.json` with `#` prefixes to create stable internal module paths, replacing brittle relative imports like `../../../utils`. These subpath imports are private—external consumers of the package cannot resolve them.
+Use the `imports` field in `package.json` with `#` prefixes to create stable internal module paths, replacing brittle relative imports like `../../../utils`. These subpath imports are private. External consumers of the package cannot resolve them.
 
 The field accepts exact paths and wildcards:
 
@@ -390,7 +331,7 @@ For Node.js 22.6–22.17, use `--experimental-strip-types`. Older versions requi
 
 # Rule: Use `repoq` for Repository Queries
 
-Use `repoq` for reading repository state instead of piping `git`/`gh` through `awk`/`jq`/`grep`. Each command handles edge cases (detached HEAD, unborn branches, missing auth) and returns validated JSON. Use raw `git`/`gh` for mutations (commit, push, merge). Run `npx -y repoq --help` if unsure of the available subcommands.
+Use `repoq` for reading repository state instead of piping `git` or the forge CLI through `awk`/`jq`/`grep`. Each command handles edge cases (detached HEAD, unborn branches, missing auth) and returns validated JSON. Use raw `git` for commit/push/merge, and the repo's forge CLI for forge-side mutations (PRs, issues, releases) — `gh` for GitHub or `fgj` for Forgejo, per the detected provider. Run `npx -y repoq --help` if unsure of the available subcommands.
 
 # Rule: Discriminated Unions
 
@@ -431,16 +372,14 @@ type SizeKey = keyof typeof Size; // "xs" | "sm" | "md"
 type SizeValue = (typeof Size)[SizeKey]; // "EXTRA_SMALL" | "SMALL" | "MEDIUM"
 ```
 
-Numeric enums are especially problematic—they produce reverse mappings that double the number of keys, so `Object.keys()` on a 4-member numeric enum returns 8 entries. String enums do not have this behavior.
+Numeric enums are especially problematic: they produce reverse mappings that double the number of keys, so `Object.keys()` on a 4-member numeric enum returns 8 entries. String enums do not have this behavior.
 
 # Rule: Error Result Types
 
 Throw errors when framework infrastructure handles them (e.g., a backend request handler converting the throw into an HTTP 500). For operations where callers must handle failure explicitly, return a result type instead of using `try`/`catch` at the call site:
 
 ```ts
-type Result<T, E extends Error> =
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+type Result<T, E extends Error> = { ok: true; value: T } | { ok: false; error: E };
 
 const parseJson = (input: string): Result<unknown, Error> => {
   try {
@@ -503,11 +442,11 @@ After release, replace the local path with the published version: `pnpm add @sco
 
 # Rule: Module Exports
 
-Don't use default exports. Don't use barrel files (`index.ts` that re-exports siblings). Both add indirection that breaks the link between an import and its source—default exports let importers pick arbitrary names, barrels route imports through an intermediary. This harms refactoring, IDE navigation, and build performance.
+Don't use default exports. Don't use barrel files (`index.ts` that re-exports siblings). Both add indirection that breaks the link between an import and its source: default exports let importers pick arbitrary names, barrels route imports through an intermediary. This harms refactoring, IDE navigation, and build performance.
 
 Don't `export` symbols from internal modules unless they're consumed outside that module or are part of the package's public API. knip treats unused exports as failures and will block the commit.
 
-**Exception:** A single `index.ts` entry point for an npm library's public API is acceptable—this is the package boundary, not an internal convenience barrel.
+**Exception:** A single `index.ts` entry point for an npm library's public API is acceptable: this is the package boundary, not an internal convenience barrel.
 
 ```ts
 // Avoid
@@ -613,17 +552,17 @@ Use explicit `include`/`exclude` patterns in environment-specific configs. Exclu
 { "include": ["**/*.test.*", "**/*.spec.*"], "exclude": ["node_modules", "dist"] }
 ```
 
-## Glob Support
+## Glob support
 
 TypeScript globs are intentionally limited and differ from bash/zsh globs: `*`, `**`, `{a,b}` work; extended patterns (`?(x)`, `!(x)`) do not. Use `**/*.test.*` instead of `**/*.{test,spec}.?(c|m)[jt]s?(x)`.
 
-## Resolution Priority
+## Resolution priority
 
 `files` > `include` > `exclude`. If a file matches both `include` and `exclude`, it is excluded. Exception: imported files bypass `exclude`.
 
 # Rule: Zod `.nullish()` for Backend Fields That May Be Absent
 
-When a Zod schema validates an external API response, fields that the producer may either set to `null` or omit entirely must accept both. `.nullable()` accepts `null` but rejects `undefined`; `.optional()` accepts `undefined` but rejects `null`; `.nullish()` accepts both.
+Default to `.nullish()` for Zod response-schema fields whose producer you don't fully control — it's the only modifier that accepts both `null` and a missing key. `.nullable()` rejects `undefined`; `.optional()` rejects `null`; `.nullish()` accepts both.
 
 ```ts
 import * as z from "zod";
@@ -642,7 +581,7 @@ const Customer = z.object({
 });
 ```
 
-Default to `.nullish()` for response fields where you don't fully control the producer. The failure mode is silent and severe: a single missing key throws a `ZodError` from `.parse()`, which often runs inside an auth callback or request handler that turns the throw into a logout, redirect, or 500 — symptoms far removed from the schema mismatch.
+The failure mode is silent and severe: a single missing key throws a `ZodError` from `.parse()`, which often runs inside an auth callback or request handler that turns the throw into a logout, redirect, or 500 — symptoms far removed from the schema mismatch.
 
 # Rule: Zod Schema Naming
 
@@ -667,4 +606,4 @@ const UserSchema = z.object({ name: z.string() });
 type User = z.infer<typeof UserSchema>;
 ```
 
-Export both the schema and type with the same name. This reduces cognitive load (one concept, one name) and creates unmistakable association between schema and type.
+Export both the schema and type with the same name. One concept, one name: the schema and type are unmistakably linked.
