@@ -8,10 +8,7 @@ import type { Linter } from "eslint";
  */
 export const nodeTestConfig: Linter.Config = {
   name: "axkit/node-test",
-  files: [
-    "**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}",
-    "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}",
-  ],
+  files: ["**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}", "tests/**/*.{ts,tsx,js,mjs,cjs,mts,cts}"],
   rules: {
     "@typescript-eslint/no-floating-promises": [
       "error",

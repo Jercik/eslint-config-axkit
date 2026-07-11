@@ -4,10 +4,7 @@ import { pathToFileURL } from "node:url";
 const consumerRequire = createRequire(`${process.cwd()}/`);
 
 async function dynamicImport(resolvedPath: string): Promise<unknown> {
-  const imported = (await import(pathToFileURL(resolvedPath).href)) as Record<
-    string,
-    unknown
-  >;
+  const imported = (await import(pathToFileURL(resolvedPath).href)) as Record<string, unknown>;
   return imported["default"] ?? imported;
 }
 
