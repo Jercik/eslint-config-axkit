@@ -1,1 +1,3 @@
-export { node as default } from "oxlint-config-j4k";
+import { compose, node, nodeTest } from "@j4k/oxlint-config";
+
+export default compose(node, nodeTest);

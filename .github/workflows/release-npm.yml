@@ -51,7 +51,6 @@ jobs:
         run: echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
       - name: Release
-        id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm exec semantic-release
