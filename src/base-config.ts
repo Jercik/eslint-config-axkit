@@ -1,9 +1,7 @@
 import globals from "globals";
 import type { Linter } from "eslint";
 
-const DEFAULT_PROJECT_SERVICE_ALLOW_DEFAULT_PROJECT = [
-  "scripts/export-release-version-plugin.mjs",
-];
+const DEFAULT_PROJECT_SERVICE_ALLOW_DEFAULT_PROJECT = ["scripts/export-release-version-plugin.mjs"];
 
 export function createBaseConfig(): Linter.Config {
   return {
@@ -37,10 +35,7 @@ export function createBaseConfig(): Linter.Config {
       "no-implicit-coercion": ["error", { allow: ["!!"] }],
 
       // Allow numbers in template literals (safe and common)
-      "@typescript-eslint/restrict-template-expressions": [
-        "error",
-        { allowNumber: true },
-      ],
+      "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
 
       // Disallow value-returning functions where void-returning expected
       "@typescript-eslint/strict-void-return": "error",
@@ -98,10 +93,7 @@ export function createBaseConfig(): Linter.Config {
       "@typescript-eslint/no-confusing-non-null-assertion": "error",
 
       // Enforce import type for type-only imports
-      "@typescript-eslint/consistent-type-imports": [
-        "error",
-        { prefer: "type-imports" },
-      ],
+      "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
 
       // Enforce export type for type-only exports
       "@typescript-eslint/consistent-type-exports": "error",

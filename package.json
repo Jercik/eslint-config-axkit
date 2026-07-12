@@ -2,30 +2,31 @@
   "name": "eslint-config-axkit",
   "version": "1.0.0",
   "description": "Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn",
-  "author": "Łukasz Jerciński",
-  "license": "MIT",
-  "scripts": {
-    "prepack": "pnpm run rebuild",
-    "prepare": "git config core.hooksPath .githooks",
-    "build": "tsgo -p tsconfig.app.json",
-    "clean": "rm -rf dist *.tsbuildinfo",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "fta": "fta-check",
-    "knip": "knip",
-    "lint": "eslint",
-    "rebuild": "pnpm run clean && pnpm run build",
-    "test": "node --test src/**/*.test.ts",
-    "typecheck": "tsgo -b --noEmit"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jercik/eslint-config-axkit.git"
-  },
+  "keywords": [
+    "axkit",
+    "eslint",
+    "eslint-config",
+    "eslintconfig",
+    "flat-config",
+    "prettier",
+    "typescript",
+    "unicorn"
+  ],
   "homepage": "https://github.com/Jercik/eslint-config-axkit#readme",
   "bugs": {
     "url": "https://github.com/Jercik/eslint-config-axkit/issues"
   },
+  "license": "MIT",
+  "author": "Łukasz Jerciński",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jercik/eslint-config-axkit.git"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,24 +36,38 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
-  "keywords": [
-    "eslint",
-    "eslintconfig",
-    "eslint-config",
-    "flat-config",
-    "typescript",
-    "prettier",
-    "unicorn",
-    "axkit"
-  ],
-  "packageManager": "pnpm@11.8.0",
-  "engines": {
-    "node": ">=22.19.0"
+  "scripts": {
+    "build": "tsgo -p tsconfig.app.json",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "format": "oxfmt --config .oxfmtrc.json .",
+    "format:check": "oxfmt --check --config .oxfmtrc.json .",
+    "fta": "fta-check",
+    "knip": "knip",
+    "lint": "eslint",
+    "prepack": "pnpm run rebuild",
+    "prepare": "if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then git config core.hooksPath .githooks; fi",
+    "rebuild": "pnpm run clean && pnpm run build",
+    "test": "node --test src/**/*.test.ts",
+    "typecheck": "tsgo -b --noEmit"
+  },
+  "dependencies": {
+    "@eslint/compat": "^2.0.5",
+    "@eslint/js": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "globals": "^17.5.0",
+    "typescript-eslint": "^8.59.0"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@types/node": "^25.6.0",
+    "@typescript/native-preview": "beta",
+    "eslint": "^10.2.1",
+    "fta-check": "^1.5.2",
+    "fta-cli": "^3.0.0",
+    "knip": "^6.5.0",
+    "oxfmt": "^0.58.0",
+    "semantic-release": "^25.0.3"
   },
   "peerDependencies": {
     "@vitest/eslint-plugin": ">=1",
@@ -79,23 +94,8 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "@eslint/compat": "^2.0.5",
-    "@eslint/js": "^10.0.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-unicorn": "^64.0.0",
-    "globals": "^17.5.0",
-    "typescript-eslint": "^8.59.0"
+  "engines": {
+    "node": ">=22.19.0"
   },
-  "devDependencies": {
-    "@total-typescript/ts-reset": "^0.6.1",
-    "@types/node": "^25.6.0",
-    "eslint": "^10.2.1",
-    "fta-check": "^1.5.2",
-    "fta-cli": "^3.0.0",
-    "knip": "^6.5.0",
-    "prettier": "3.8.3",
-    "semantic-release": "^25.0.3",
-    "@typescript/native-preview": "beta"
-  }
+  "packageManager": "pnpm@11.8.0"
 }

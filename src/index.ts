@@ -70,8 +70,7 @@ export type Options = {
  * - Tailwind CSS rules (better-tailwindcss/recommended) via `tailwindcss: "path/to/entry.css"`
  */
 export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
-  const { gitignorePath, vitest, fastify, nextjs, storybook, tailwindcss } =
-    options;
+  const { gitignorePath, vitest, fastify, nextjs, storybook, tailwindcss } = options;
 
   const configs: Linter.Config[] = [
     {
@@ -82,9 +81,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
 
   // ── Gitignore ──────────────────────────────────────────────────────
   if (gitignorePath) {
-    configs.push(
-      includeIgnoreFile(gitignorePath, "Copy patterns from .gitignore"),
-    );
+    configs.push(includeIgnoreFile(gitignorePath, "Copy patterns from .gitignore"));
   }
 
   // ── Next.js (before base so axkit's strict rules override) ─────────
@@ -94,21 +91,14 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
       importOptional("eslint-config-next/typescript"),
       importOptional("eslint-plugin-react-refresh"),
     ]);
-    configs.push(
-      ...(nextVitals as Linter.Config[]),
-      ...(nextTs as Linter.Config[]),
-      {
-        name: "axkit/react-refresh",
-        files: ["**/*.{tsx,jsx}"],
-        plugins: { "react-refresh": reactRefreshPlugin as ESLint.Plugin },
-        rules: {
-          "react-refresh/only-export-components": [
-            "warn",
-            { allowConstantExport: true },
-          ],
-        },
+    configs.push(...(nextVitals as Linter.Config[]), ...(nextTs as Linter.Config[]), {
+      name: "axkit/react-refresh",
+      files: ["**/*.{tsx,jsx}"],
+      plugins: { "react-refresh": reactRefreshPlugin as ESLint.Plugin },
+      rules: {
+        "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       },
-    );
+    });
   }
 
   // ── Core configs ───────────────────────────────────────────────────
@@ -148,11 +138,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
   // ── Vitest (optional, requires @vitest/eslint-plugin) ──────────────
   if (vitest) {
     const vitestPlugin = await importOptional("@vitest/eslint-plugin");
-    configs.push(
-      createVitestConfig(
-        vitestPlugin as Parameters<typeof createVitestConfig>[0],
-      ),
-    );
+    configs.push(createVitestConfig(vitestPlugin as Parameters<typeof createVitestConfig>[0]));
   }
 
   // ── Fastify (disable conflicting rules) ────────────────────────────
@@ -185,9 +171,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
 
   // ── Storybook (after base, before Prettier) ────────────────────────
   if (storybook) {
-    const storybookPlugin = (await importOptional(
-      "eslint-plugin-storybook",
-    )) as {
+    const storybookPlugin = (await importOptional("eslint-plugin-storybook")) as {
       configs: { "flat/recommended": Linter.Config[] };
     };
     configs.push(...storybookPlugin.configs["flat/recommended"]);
@@ -195,9 +179,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
 
   // ── Tailwind CSS (before Prettier) ─────────────────────────────────
   if (tailwindcss) {
-    const tailwindPlugin = (await importOptional(
-      "eslint-plugin-better-tailwindcss",
-    )) as {
+    const tailwindPlugin = (await importOptional("eslint-plugin-better-tailwindcss")) as {
       configs: { recommended: Linter.Config | Linter.Config[] };
     };
     const tailwindConfig = tailwindPlugin.configs.recommended;
@@ -218,10 +200,7 @@ export async function axkit(options: Options = {}): Promise<Linter.Config[]> {
           // Multi-line strings cause hydration mismatches in Next.js + Turbopack
           // because the server preserves newlines while the client collapses them.
           // See: https://github.com/tailwindlabs/tailwindcss/discussions/19582
-          "better-tailwindcss/no-unnecessary-whitespace": [
-            "error",
-            { allowMultiline: false },
-          ],
+          "better-tailwindcss/no-unnecessary-whitespace": ["error", { allowMultiline: false }],
           // Must be disabled — it enforces multi-line wrapping, which conflicts
           // with allowMultiline: false above.
           "better-tailwindcss/enforce-consistent-line-wrapping": "off",
