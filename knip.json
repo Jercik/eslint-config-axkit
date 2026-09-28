@@ -4,5 +4,6 @@
   "project": ["src/**/*.ts", "types/**/*.d.ts"],
   "rules": {
     "duplicates": "off"
-  }
+  },
+  "ignoreDependencies": ["conventional-changelog-conventionalcommits"]
 }
