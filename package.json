@@ -64,7 +64,7 @@
     "@typescript/native-preview": "beta",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "eslint": "^10.2.1",
-    "fta-check": "^1.5.2",
+    "fta-check": "^1.5.8",
     "fta-cli": "^3.0.0",
     "knip": "^6.5.0",
     "oxfmt": "^0.58.0",
