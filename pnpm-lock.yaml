@@ -58,8 +58,8 @@ importers:
         specifier: ^10.2.1
         version: 10.2.1(jiti@2.6.1)(supports-color@7.2.0)
       fta-check:
-        specifier: ^1.5.2
-        version: 1.5.2(fta-cli@3.0.0)
+        specifier: ^1.5.8
+        version: 1.5.8(fta-cli@3.0.0)
       fta-cli:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2151,9 +2151,9 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fta-check@1.5.2:
-    resolution: {integrity: sha512-eeWpHmafanalQ7oQFDQQeniGwK7J8bkTZXyVylMqTAs3oSHoUl1JWAaJ3S2KO5Hbpc7jRAf6e66QyDeyjtkGSQ==}
-    engines: {node: '>=22.19.0'}
+  fta-check@1.5.8:
+    resolution: {integrity: sha512-IQvXSNqjE4UAIyR27jrTpi5DgxkFHip9Weq+ZuONU3BFqTsTXysapIDISkcSoEloHAU8uoHU0lZMSRDB6Lx7hg==}
+    engines: {node: '>=24.15.0'}
     hasBin: true
     peerDependencies:
       fta-cli: ^3.0.0
@@ -5932,7 +5932,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fta-check@1.5.2(fta-cli@3.0.0):
+  fta-check@1.5.8(fta-cli@3.0.0):
     dependencies:
       '@commander-js/extra-typings': 14.0.0(commander@14.0.3)
       commander: 14.0.3
