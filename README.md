@@ -1,5 +1,7 @@
 # eslint-config-axkit
 
+> **Deprecated.** This package is no longer maintained. Use [`@j4k/oxlint-config`](https://www.npmjs.com/package/@j4k/oxlint-config) instead.
+
 Reusable ESLint flat config for TypeScript + Node.js projects with strict type checking, Prettier, and Unicorn.
 
 ## Quick Start
